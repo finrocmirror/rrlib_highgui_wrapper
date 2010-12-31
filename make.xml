@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<targets>
+
+  <rrlib name="highgui_wrapper"
+        libs="opencv_all">
+    <sources>
+      tWindow.cpp
+    </sources>
+  </rrlib>
+
+</targets>
