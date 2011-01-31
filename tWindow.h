@@ -32,8 +32,8 @@
  *
  */
 //----------------------------------------------------------------------
-#ifndef _rrlib_highgui_wrapper_tWindow_h_
-#define _rrlib_highgui_wrapper_tWindow_h_
+#ifndef __rrlib__highgui__wrapper__tWindow_h__
+#define __rrlib__highgui__wrapper__tWindow_h__
 
 //----------------------------------------------------------------------
 // External includes (system with <>, local with "")
