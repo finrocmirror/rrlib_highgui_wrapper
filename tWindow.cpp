@@ -155,11 +155,11 @@ void tWindow::ReleaseAllInstances()
 //----------------------------------------------------------------------
 // tWindow Render
 //----------------------------------------------------------------------
-void tWindow::Render() const
+void tWindow::Render(unsigned int delay) const
 {
   cvShowImage(this->name.c_str(), this->image);
-  std::cout << "[Press key to continue or q to quit]" << std::endl;
-  int key = cvWaitKey();
+  std::cout << "[Press " << (delay == 0 ? "key to continue or " : "") << "q to quit]" << std::endl;
+  int key = cvWaitKey(delay);
 
   if (key == 113 || key == 1048689)
   {

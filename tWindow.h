@@ -86,7 +86,7 @@ public:
 
   static void ReleaseAllInstances();
 
-  void Render() const;
+  void Render(unsigned int delay = 0) const;
 
   void SetColor(unsigned char r, unsigned char g, unsigned char b);
   void SetColor(unsigned int index);
