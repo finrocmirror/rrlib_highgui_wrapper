@@ -85,10 +85,12 @@ const struct
 //----------------------------------------------------------------------
 // tWindow constructors
 //----------------------------------------------------------------------
-tWindow::tWindow(const std::string &name, unsigned int width, unsigned int height)
+tWindow::tWindow(const std::string &name, unsigned int width, unsigned int height, int min_x, int min_y)
     : name(name),
     width(width),
     height(height),
+    min_x(min_x),
+    min_y(min_y),
     image(0),
     r(0), g(0), b(0)
 {
@@ -119,6 +121,15 @@ std::map<std::string, tWindow *> &tWindow::NameToWindowMap()
 //----------------------------------------------------------------------
 // tWindow GetInstance
 //----------------------------------------------------------------------
+tWindow &tWindow::GetInstance(const std::string &name, unsigned int width, unsigned int height, int min_x, int min_y)
+{
+  if (NameToWindowMap().find(name) == NameToWindowMap().end())
+  {
+    NameToWindowMap()[name] = new tWindow(name, width, height, min_x, min_y);
+  }
+  return *NameToWindowMap()[name];
+}
+
 tWindow &tWindow::GetInstance(const std::string &name, unsigned int width, unsigned int height)
 {
   if (NameToWindowMap().find(name) == NameToWindowMap().end())
@@ -211,13 +222,27 @@ void tWindow::DrawPoint(unsigned int x, unsigned int y, unsigned char r, unsigne
 //----------------------------------------------------------------------
 void tWindow::DrawPointNormalized(double x, double y)
 {
-  this->DrawPoint((unsigned int)(x * this->width), (unsigned int)(y * this->height));
+  this->DrawPoint(static_cast<unsigned int>(x * this->width), static_cast<unsigned int>(y * this->height));
 }
 
 void tWindow::DrawPointNormalized(double x, double y, unsigned char r, unsigned char g, unsigned char b)
 {
   this->SetColor(r, g, b);
   this->DrawPointNormalized(x, y);
+}
+
+//----------------------------------------------------------------------
+// tWindow DrawPointShifted
+//----------------------------------------------------------------------
+void tWindow::DrawPointShifted(double x, double y)
+{
+  this->DrawPoint(x - this->min_x, y - this->min_y);
+}
+
+void tWindow::DrawPointShifted(double x, double y, unsigned char r, unsigned char g, unsigned char b)
+{
+  this->SetColor(r, g, b);
+  this->DrawPointShifted(x, y);
 }
 
 //----------------------------------------------------------------------
@@ -241,13 +266,28 @@ void tWindow::DrawLine(unsigned int start_x, unsigned int start_y, unsigned int 
 //----------------------------------------------------------------------
 void tWindow::DrawLineNormalized(double start_x, double start_y, double stop_x, double stop_y)
 {
-  this->DrawLine((unsigned int)(start_x * this->width), (unsigned int)(start_y * this->height), (unsigned int)(stop_x * this->width), (unsigned int)(stop_y * this->height));
+  this->DrawLine(static_cast<unsigned int>(start_x * this->width), static_cast<unsigned int>(start_y * this->height),
+                 static_cast<unsigned int>(stop_x * this->width), static_cast<unsigned int>(stop_y * this->height));
 }
 
 void tWindow::DrawLineNormalized(double start_x, double start_y, double stop_x, double stop_y, unsigned char r, unsigned char g, unsigned char b)
 {
   this->SetColor(r, g, b);
   this->DrawLineNormalized(start_x, start_y, stop_x, stop_y);
+}
+
+//----------------------------------------------------------------------
+// tWindow DrawLineShifted
+//----------------------------------------------------------------------
+void tWindow::DrawLineShifted(double start_x, double start_y, double stop_x, double stop_y)
+{
+  this->DrawLine(start_x - this->min_x, start_y - this->min_y, stop_x - this->min_x, stop_y - this->min_y);
+}
+
+void tWindow::DrawLineShifted(double start_x, double start_y, double stop_x, double stop_y, unsigned char r, unsigned char g, unsigned char b)
+{
+  this->SetColor(r, g, b);
+  this->DrawLineShifted(start_x, start_y, stop_x, stop_y);
 }
 
 //----------------------------------------------------------------------
@@ -271,13 +311,28 @@ void tWindow::DrawRectangle(unsigned int min_x, unsigned int min_y, unsigned int
 //----------------------------------------------------------------------
 void tWindow::DrawRectangleNormalized(double min_x, double min_y, double max_x, double max_y)
 {
-  this->DrawRectangle((unsigned int)(min_x * this->width), (unsigned int)(min_y * this->height), (unsigned int)(max_x * this->width), (unsigned int)(max_y * this->height));
+  this->DrawRectangle(static_cast<unsigned int>(min_x * this->width), static_cast<unsigned int>(min_y * this->height),
+                      static_cast<unsigned int>(max_x * this->width), static_cast<unsigned int>(max_y * this->height));
 }
 
 void tWindow::DrawRectangleNormalized(double min_x, double min_y, double max_x, double max_y, unsigned char r, unsigned char g, unsigned char b)
 {
   this->SetColor(r, g, b);
   this->DrawRectangleNormalized(min_x, min_y, max_x, max_y);
+}
+
+//----------------------------------------------------------------------
+// tWindow DrawRectangleShifted
+//----------------------------------------------------------------------
+void tWindow::DrawRectangleShifted(double min_x, double min_y, double max_x, double max_y)
+{
+  this->DrawRectangle(min_x - this->min_x, min_y - this->min_y, max_x - this->min_x, max_y - this->min_y);
+}
+
+void tWindow::DrawRectangleShifted(double min_x, double min_y, double max_x, double max_y, unsigned char r, unsigned char g, unsigned char b)
+{
+  this->SetColor(r, g, b);
+  this->DrawRectangleShifted(min_x, min_y, max_x, max_y);
 }
 
 //----------------------------------------------------------------------
@@ -300,13 +355,28 @@ void tWindow::DrawCircle(unsigned int x, unsigned int y, unsigned int radius, bo
 //----------------------------------------------------------------------
 void tWindow::DrawCircleNormalized(double x, double y, double radius, bool filled)
 {
-  this->DrawCircle((unsigned int)(x * this->width), (unsigned int)(y * this->height), (unsigned int)(radius * sqrt(this->width * this->height)), filled);
+  this->DrawCircle(static_cast<unsigned int>(x * this->width), static_cast<unsigned int>(y * this->height),
+                   static_cast<unsigned int>(radius * sqrt(this->width * this->height)), filled);
 }
 
 void tWindow::DrawCircleNormalized(double x, double y, double radius, bool filled, unsigned char r, unsigned char g, unsigned char b)
 {
   this->SetColor(r, g, b);
   this->DrawCircleNormalized(x, y, radius, filled);
+}
+
+//----------------------------------------------------------------------
+// tWindow DrawCircleShifted
+//----------------------------------------------------------------------
+void tWindow::DrawCircleShifted(double x, double y, double radius, bool filled)
+{
+  this->DrawCircle(x - this->min_x, y - this->min_y, radius, filled);
+}
+
+void tWindow::DrawCircleShifted(double x, double y, double radius, bool filled, unsigned char r, unsigned char g, unsigned char b)
+{
+  this->SetColor(r, g, b);
+  this->DrawCircleShifted(x, y, radius, filled);
 }
 
 //----------------------------------------------------------------------

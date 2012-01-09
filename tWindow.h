@@ -80,6 +80,7 @@ class tWindow
 //----------------------------------------------------------------------
 public:
 
+  static tWindow &GetInstance(const std::string &name, unsigned int width, unsigned int height, int min_x, int min_y);
   static tWindow &GetInstance(const std::string &name, unsigned int width, unsigned int height);
   static tWindow &GetInstance(const std::string &name);
   static tWindow &GetInstance();
@@ -97,11 +98,17 @@ public:
   void DrawPointNormalized(double x, double y);
   void DrawPointNormalized(double x, double y, unsigned char r, unsigned char g, unsigned char b);
 
+  void DrawPointShifted(double x, double y);
+  void DrawPointShifted(double x, double y, unsigned char r, unsigned char g, unsigned char b);
+
   void DrawLine(unsigned int start_x, unsigned int start_y, unsigned int stop_x, unsigned int stop_y);
   void DrawLine(unsigned int start_x, unsigned int start_y, unsigned int stop_x, unsigned int stop_y, unsigned char r, unsigned char g, unsigned char b);
 
   void DrawLineNormalized(double start_x, double start_y, double stop_x, double stop_y);
   void DrawLineNormalized(double start_x, double start_y, double stop_x, double stop_y, unsigned char r, unsigned char g, unsigned char b);
+
+  void DrawLineShifted(double start_x, double start_y, double stop_x, double stop_y);
+  void DrawLineShifted(double start_x, double start_y, double stop_x, double stop_y, unsigned char r, unsigned char g, unsigned char b);
 
   void DrawRectangle(unsigned int min_x, unsigned int min_y, unsigned int max_x, unsigned int max_y);
   void DrawRectangle(unsigned int min_x, unsigned int min_y, unsigned int max_x, unsigned int max_y, unsigned char r, unsigned char g, unsigned char b);
@@ -109,11 +116,17 @@ public:
   void DrawRectangleNormalized(double min_x, double min_y, double max_x, double max_y);
   void DrawRectangleNormalized(double min_x, double min_y, double max_x, double max_y, unsigned char r, unsigned char g, unsigned char b);
 
+  void DrawRectangleShifted(double min_x, double min_y, double max_x, double max_y);
+  void DrawRectangleShifted(double min_x, double min_y, double max_x, double max_y, unsigned char r, unsigned char g, unsigned char b);
+
   void DrawCircle(unsigned int x, unsigned int y, unsigned int radius, bool filled);
   void DrawCircle(unsigned int x, unsigned int y, unsigned int radius, bool filled, unsigned char r, unsigned char g, unsigned char b);
 
   void DrawCircleNormalized(double x, double y, double radius, bool filled);
   void DrawCircleNormalized(double x, double y, double radius, bool filled, unsigned char r, unsigned char g, unsigned char b);
+
+  void DrawCircleShifted(double x, double y, double radius, bool filled);
+  void DrawCircleShifted(double x, double y, double radius, bool filled, unsigned char r, unsigned char g, unsigned char b);
 
   void Clear();
 
@@ -125,12 +138,14 @@ private:
   std::string name;
   unsigned int width;
   unsigned int height;
+  unsigned int min_x;
+  unsigned int min_y;
   IplImage *image;
   unsigned char r, g, b;
 
   static std::map<std::string, tWindow *> &NameToWindowMap();
 
-  tWindow(const std::string &name, unsigned int width, unsigned int height);
+  tWindow(const std::string &name, unsigned int width, unsigned int height, int min_x = 0, int min_y = 0);
 
   ~tWindow();
 
