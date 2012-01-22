@@ -93,7 +93,7 @@ const struct
 // tWindow constructors
 //----------------------------------------------------------------------
 tWindow::tWindow(const std::string &name, unsigned int width, unsigned int height, int min_x, int min_y)
-    : name(name),
+  : name(name),
     width(width),
     height(height),
     min_x(min_x),
